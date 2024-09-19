@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { DataSource } from 'typeorm';
-import { UsersModule } from 'src/users/users.module';
+import { JwtModule } from '@nestjs/jwt';
+// import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -18,7 +19,11 @@ import { UsersModule } from 'src/users/users.module';
       entities: [User],
       synchronize: true,
     }),
-    UsersModule,
+    TypeOrmModule.forFeature([User]),
+    JwtModule.register({
+      secret: 'secret',
+      signOptions: { expiresIn: '1d' },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
